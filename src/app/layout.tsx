@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = 'force-dynamic';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Leaf, MapPin, AlertTriangle, BarChart3, Settings, Home as HomeIcon } from 'lucide-react';
