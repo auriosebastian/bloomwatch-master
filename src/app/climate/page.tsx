@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = 'force-dynamic'; //adicionei isso aqui se der erro é isso!!!
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
