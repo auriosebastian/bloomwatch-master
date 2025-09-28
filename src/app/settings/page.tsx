@@ -137,10 +137,10 @@ export default function SettingsPage() {
   const teamMembers = [
     { name: "Aurio Sebastião", role: "Desenvolvedor Frontend", avatar: "AS", color: "from-blue-400 to-cyan-400" },
     { name: "Americo Andre", role: "Especialista GIS", avatar: "AA", color: "from-emerald-400 to-green-400" },
-    { name: "Francisco André", role: "Cientista de Dados", avatar: "FA", color: "from-purple-400 to-pink-400" },
+    { name: "Francisco André", role: "Analista de Dados Desenvolvedor full-stack", avatar: "FA", color: "from-purple-400 to-pink-400" },
     { name: "Jaime Francisco", role: "Desenvolvedor Backend", avatar: "JF", color: "from-orange-400 to-red-400" },
-    { name: "Lirio João", role: "Designer UX/UI", avatar: "LJ", color: "from-yellow-400 to-amber-400" },
-    { name: "Rayssa Rodrigues", role: "Product Manager", avatar: "RR", color: "from-indigo-400 to-blue-400" }
+    { name: "Lirio João", role: "Designer", avatar: "LJ", color: "from-yellow-400 to-amber-400" },
+    { name: "Rayssa Rodrigues", role: "Oradora", avatar: "RR", color: "from-indigo-400 to-blue-400" }
   ];
 
   return (
