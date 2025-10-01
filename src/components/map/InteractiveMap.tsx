@@ -1,4 +1,3 @@
-// src/components/map/InteractiveMap.tsx - CORRIGIDO PARA LIDAR COM REDIMENSIONAMENTO
 "use client";
 
 import React, { useEffect } from 'react';
@@ -6,16 +5,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-interface VegetationDataItem {
-  id: string;
-  region: string;
-  ndvi_value: number;
-  risk_level: 'baixo' | 'medio' | 'alto' | 'critico';
-  coordinates?: {
-    latitude: number;
-    longitude: number;
-  };
-}
+// Importa o tipo completo do DataContext (remove a interface local)
+import { VegetationDataItem } from "@/context/DataContext";
 
 interface InteractiveMapProps {
   data: VegetationDataItem[];
@@ -24,7 +15,7 @@ interface InteractiveMapProps {
   onPointSelect: (point: VegetationDataItem) => void;
   selectedPoint: VegetationDataItem | null;
   baseLayerUrl: string;
-  isFullscreen: boolean; // Nova propriedade
+  isFullscreen: boolean;
 }
 
 // Componente auxiliar para controlar o mapa (zoom, centro E redimensionamento)
@@ -93,6 +84,12 @@ export default function InteractiveMap({ data, center, zoom, onPointSelect, sele
             <Popup>
               <div className="font-semibold">{point.region}</div>
               <div className="text-emerald-600">NDVI: {point.ndvi_value.toFixed(3)}</div>
+              {/* Campos adicionais do tipo completo para enriquecer o Popup */}
+              <div className="text-gray-500 text-sm">Data: {point.date.split('T')[0]}</div>
+              <div className="text-blue-600 text-sm">Temp: {point.temperature}°C</div>
+              <div className="text-green-600 text-sm">Umidade: {point.soil_moisture}%</div>
+              <div className="text-purple-600 text-sm">Tipo: {point.vegetation_type}</div>
+              <div className="text-red-600 font-medium">Risco: {point.risk_level}</div>
             </Popup>
           </Marker>
         )
