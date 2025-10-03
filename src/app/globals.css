@@ -1,3 +1,6 @@
+/* =============================================== */
+/* === SEU CÓDIGO ORIGINAL (MANTIDO) === */
+/* =============================================== */
 @import "tailwindcss";
 
 :root {
@@ -14,4 +17,99 @@ body {
       rgb(var(--background-end-rgb))
     );
   min-height: 100vh;
+}
+
+
+/* =============================================== */
+/* === NOVO CÓDIGO (ADICIONADO NO FINAL) === */
+/* === Estilos para Controles do Mapa Leaflet === */
+/* =============================================== */
+
+/* --- Container Principal dos Botões de Zoom (+/-) --- */
+.leaflet-control-zoom {
+  /* Remove os estilos padrão do Leaflet */
+  border: none !important;
+  box-shadow: none !important;
+  
+  /* Aplica o mesmo estilo "glassmorphism" do seu navbar */
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+  border-radius: 1rem !important; /* Equivalente a rounded-2xl */
+}
+
+/* --- Botões Individuais (+ e -) --- */
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background: transparent !important;
+  color: #374151 !important; /* Cor de texto cinza-escuro (text-gray-700) */
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Efeito de hover nos botões */
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #166534 !important; /* Cor esmeralda para combinar com o tema */
+}
+
+/* --- Linha Separadora entre os botões --- */
+.leaflet-control-zoom-in {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+/* --- Ajuste dos cantos arredondados --- */
+/* Arredonda os cantos de cima do botão '+' */
+.leaflet-control-zoom-in {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+/* Arredonda os cantos de baixo do botão '-' */
+.leaflet-control-zoom-out {
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+/* =============================================== */
+/* === Estilos para o Marcador Animado no Mapa === */
+/* =============================================== */
+
+@keyframes ping-animation {
+  75%, 100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.pulsing-dot-container {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pulsing-dot {
+  width: 1rem; /* 16px */
+  height: 1rem; /* 16px */
+  background-color: white;
+  border-radius: 9999px;
+  border: 3px solid #1d4ed8; /* Azul escuro */
+  box-shadow: 0 0 5px rgba(29, 78, 216, 0.7);
+  z-index: 10;
+}
+
+.pulsing-dot-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #3b82f6; /* Azul claro */
+  border-radius: 9999px;
+  animation: ping-animation 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  z-index: 9;
 }

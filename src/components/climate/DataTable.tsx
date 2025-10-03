@@ -21,10 +21,10 @@ export function DataTable({ data, riskConfig }: { data: any[], riskConfig: any }
             {data.slice().reverse().map((record: any) => (
               <div key={record.date} className="grid grid-cols-6 gap-4 px-4 py-3 hover:bg-gray-50 transition-colors items-center">
                 <div className="font-medium text-gray-800">{new Date(record.date).toLocaleDateString('pt-BR')}</div>
-                <div className="text-right font-mono text-red-600">{record.temperature.toFixed(1)}°C</div>
-                <div className="text-right font-mono text-blue-600">{record.soil_moisture.toFixed(1)}%</div>
-                <div className="text-right font-mono text-green-600">{record.precipitation.toFixed(1)} mm</div>
-                <div className="text-right font-mono text-lime-600">{record.ndvi.toFixed(3)}</div>
+                <div className="text-right font-mono">{record.temperature.toFixed(1)}°C</div>
+                <div className="text-right font-mono">{record.soil_moisture.toFixed(1)}%</div>
+                <div className="text-right font-mono">{record.precipitation.toFixed(1)} mm</div>
+                <div className="text-right font-mono">{record.ndvi.toFixed(3)}</div>
                 <div className="text-center"><Badge className={`border-0 text-xs ${riskConfig[record.risk_level].color}`}>{riskConfig[record.risk_level].label}</Badge></div>
               </div>
             ))}
