@@ -3,9 +3,11 @@
 
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Layers, Satellite, Mountain } from 'lucide-react';
+import { Layers, Satellite, Mountain, BarChart3 } from 'lucide-react';
 import LocationDashboard from '@/components/map/LocationDashboard';
+import { Button } from '@/components/ui/button'; // ← IMPORT ADICIONADO
 import L from 'leaflet';
+import { useRouter } from 'next/navigation';
 
 const SatNogsMap = dynamic(() => import('@/components/map/SatNogsMap'), {
   ssr: false,
@@ -24,11 +26,20 @@ interface SelectedLocation {
   radius: number;
 }
 
+interface AnalysisPayload {
+  coordinates: { lat: number; lng: number };
+  radius: number;
+  period: { start: string; end: string };
+  locationName?: string;
+}
+
 export default function MapPage() {
   const [activeLayer, setActiveLayer] = useState<LayerType>('satellite');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<SelectedLocation | null>(null);
   const [analysisStatus, setAnalysisStatus] = useState<'idle' | 'analyzing' | 'completed'>('idle');
+  const [currentAnalysis, setCurrentAnalysis] = useState<AnalysisPayload | null>(null);
+  const router = useRouter();
 
   const selectLayer = (layer: LayerType) => {
     setActiveLayer(layer);
@@ -44,6 +55,7 @@ export default function MapPage() {
         Math.abs(selectedLocation.lng - lng) < 0.0001) {
       setSelectedLocation(null);
       setAnalysisStatus('idle');
+      setCurrentAnalysis(null);
     } else {
       // Caso contrário, adiciona/atualiza o marcador
       setSelectedLocation({
@@ -52,12 +64,14 @@ export default function MapPage() {
         radius: 50, // Default radius
       });
       setAnalysisStatus('idle');
+      setCurrentAnalysis(null);
     }
   };
 
   const handleCloseDashboard = () => {
     setSelectedLocation(null);
     setAnalysisStatus('idle');
+    setCurrentAnalysis(null);
   };
 
   const handleRadiusChange = (radius: number) => {
@@ -69,9 +83,26 @@ export default function MapPage() {
     }
   };
 
-  // Função para lidar com mudanças no status da análise
-  const handleAnalysisStatusChange = (isAnalyzing: boolean, analysisType?: string) => {
-    setAnalysisStatus(isAnalyzing ? 'analyzing' : 'completed');
+  // 🎯 Nova função: Quando análise é iniciada
+  const handleAnalysisStart = (analysisData: AnalysisPayload) => {
+    setCurrentAnalysis(analysisData);
+    setAnalysisStatus('completed');
+    
+    // Aqui você pode salvar no contexto global ou localStorage
+    // para as abas de análise acessarem
+    localStorage.setItem('currentAnalysis', JSON.stringify(analysisData));
+    console.log('Análise salva para as abas:', analysisData);
+  };
+
+  // 🎯 Nova função: Navegar para análise detalhada
+  const handleNavigateToAnalysis = () => {
+    if (currentAnalysis) {
+      // Salvar dados no contexto da aplicação
+      localStorage.setItem('currentAnalysis', JSON.stringify(currentAnalysis));
+      
+      // Navegar para a página de análises
+      router.push('/analysis');
+    }
   };
 
   return (
@@ -84,24 +115,34 @@ export default function MapPage() {
         analysisStatus={analysisStatus}
       />
 
-      {/* Dashboard de Localização */}
+      {/* Dashboard de Localização ATUALIZADO */}
       {selectedLocation && (
         <LocationDashboard
           location={selectedLocation}
           onClose={handleCloseDashboard}
           onRadiusChange={handleRadiusChange}
-          onAnalysisStatusChange={handleAnalysisStatusChange}
+          onAnalysisStart={handleAnalysisStart}
+          onNavigateToAnalysis={handleNavigateToAnalysis}
         />
       )}
 
-      {/* Seletor de Camadas */}
+      {/* Botão para ir direto para Análises (quando houver dados) */}
+      {currentAnalysis && (
+        <div className="absolute top-4 left-4 z-[1000]">
+          <Button
+            onClick={handleNavigateToAnalysis}
+            className="bg-green-600 hover:bg-green-700 text-white shadow-lg"
+          >
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Ver Análises
+          </Button>
+        </div>
+      )}
+
+      {/* Seletor de Camadas (manter igual) */}
       <div className="absolute bottom-8 right-4 z-[1000] flex flex-col items-end">
         {isPanelOpen && (
-          <div className="
-            mb-2 p-2 flex gap-2
-            rounded-2xl bg-white/30 backdrop-blur-xl border border-white/40 shadow-2xl
-            animate-in fade-in-50 slide-in-from-bottom-5 duration-300
-          ">
+          <div className="mb-2 p-2 flex gap-2 rounded-2xl bg-white/30 backdrop-blur-xl border border-white/40 shadow-2xl animate-in fade-in-50 slide-in-from-bottom-5 duration-300">
             <div 
               className="flex flex-col items-center cursor-pointer p-1 rounded-lg"
               onClick={() => selectLayer('satellite')}
