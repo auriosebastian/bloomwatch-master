@@ -15,8 +15,7 @@ interface AnalysisSidebarProps {
 
 export default function AnalysisSidebar({ activeTab, setActiveTab, tabs, analysisData }: AnalysisSidebarProps) {
   return (
-    // Estilo da dashboard esquerda com fundo sólido e limpo
-    <div className="rounded-2xl bg-white border border-slate-200 shadow-sm w-80 flex flex-col">
+    <div className="rounded-2xl bg-white border border-slate-200 shadow-sm w-80 flex flex-col h-[calc(100vh-8rem)]">
       
       {/* Header */}
       <div className="p-6 border-b border-slate-200 flex-shrink-0">
@@ -24,9 +23,7 @@ export default function AnalysisSidebar({ activeTab, setActiveTab, tabs, analysi
         <p className="text-sm text-slate-500 mt-1">Navegue entre as diferentes visualizações</p>
       </div>
 
-      {/* ======================================================== */}
-      {/* === NAVEGAÇÃO ENTRE AS SUB-ABAS (PARTE RESTAURADA) === */}
-      {/* ======================================================== */}
+      {/* Navegação - CORRIGIDO: variant="default" */}
       <div className="p-4 space-y-2 flex-1 overflow-y-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -34,7 +31,7 @@ export default function AnalysisSidebar({ activeTab, setActiveTab, tabs, analysi
           return (
             <Button
               key={tab.id}
-              variant={isActive ? "secondary" : "ghost"}
+              variant={isActive ? "default" : "ghost"} // CORRIGIDO
               onClick={() => setActiveTab(tab.id)}
               className={`w-full justify-start transition-all duration-300 rounded-xl h-12 ${isActive ? 'shadow-md' : ''}`}
             >
@@ -45,7 +42,7 @@ export default function AnalysisSidebar({ activeTab, setActiveTab, tabs, analysi
         })}
       </div>
 
-      {/* Rodapé com Informações da Área Monitorada */}
+      {/* Rodapé */}
       <div className="p-4 border-t border-slate-200 flex-shrink-0">
         <h3 className="text-sm font-semibold text-slate-700 mb-3">Área Monitorada</h3>
         <div className="space-y-3 text-sm">
@@ -58,13 +55,6 @@ export default function AnalysisSidebar({ activeTab, setActiveTab, tabs, analysi
           <div className="flex items-center gap-2 text-slate-500">
             <Calendar className="w-4 h-4" />
             <span>{analysisData.period.start} à {analysisData.period.end}</span>
-          </div>
-          <div className="flex flex-wrap gap-1">
-            {analysisData.availableSensors.map((sensor) => (
-              <span key={sensor.id} className="px-2 py-1 bg-slate-100 rounded-md text-xs text-slate-700">
-                {sensor.name}
-              </span>
-            ))}
           </div>
         </div>
       </div>
